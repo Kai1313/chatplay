@@ -16,6 +16,7 @@ const ip = "192.168.1.4";
 const port = 3001; // You can change the port number as needed
 const MODEL_NAME = "gemini-1.0-pro";
 const API_KEY = process.env.API_KEY;
+const history = [];
 
 if (!API_KEY) {
   console.error("API_KEY is not set in .env file");
@@ -68,13 +69,16 @@ app.post('/chat', async (req, res) => {
   const chat = model.startChat({
     generationConfig,
     safetySettings,
-    history: [],
+    history,
   });
 
   try {
     // Send user input and get response
     const result = await chat.sendMessage(message);
     const response = result.response;
+
+    history.push({ role: "user", parts: [{ text: message }] });
+    history.push({ role: "model", parts: [{ text: response.text() }] });
 
     // Send response back to the client
     res.json({ response: response.text() });
