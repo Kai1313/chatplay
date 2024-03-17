@@ -1,5 +1,6 @@
 // Import required packages
 const express = require('express');
+const cors = require('cors');
 const {
   GoogleGenerativeAI,
   HarmCategory,
@@ -11,7 +12,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
-const port = 3000; // You can change the port number as needed
+const ip = "192.168.1.4";
+const port = 3001; // You can change the port number as needed
 const MODEL_NAME = "gemini-1.0-pro";
 const API_KEY = process.env.API_KEY;
 
@@ -52,6 +54,9 @@ const safetySettings = [
   },
 ];
 
+// Enable CORS for all origins
+app.use(cors());
+
 // Middleware to parse JSON bodies
 app.use(express.json());
 
@@ -80,6 +85,6 @@ app.post('/chat', async (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(port, ip, () => {
+  console.log(`Server is running on http://${ip}:${port}`);
 });

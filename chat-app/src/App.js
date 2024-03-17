@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { Container, Box } from '@mui/material';
+import ChatWindow from './ChatWindow';
+import MessageInput from './MessageInput';
 
 function App() {
+  const [messages, setMessages] = useState([]);
+
+  const handleMessageSend = (message, response) => {
+    setMessages([...messages, { sender: 'user', message }, { sender: 'bot', message: response }]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container maxWidth="md">
+      <Box mt={4}>
+        <ChatWindow messages={messages} />
+        <Box mt={5}>
+          <MessageInput onSendMessage={handleMessageSend} />
+        </Box>
+      </Box>
+    </Container>
   );
 }
 
